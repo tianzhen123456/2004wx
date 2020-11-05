@@ -20,3 +20,5 @@ Route::get('/info', function () {
 });
 
 Route::get('/test1','TextController@test1');
+
+Route::get('/Token','TextController@token');
