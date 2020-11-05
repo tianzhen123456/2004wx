@@ -12,5 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+   // return view('welcome');
 });
+Route::get('/info', function () {
+    // return view('welcome');
+    echo phpinfo();
+});
+
+Route::get('/test1','TextController@test1');
