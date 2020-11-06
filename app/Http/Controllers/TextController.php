@@ -17,30 +17,31 @@ class TextController extends Controller
      //     Redis::set($key,time());
      //     echo Redis::get($key);
      // }
-     
-     public function token(){
-      $echostr=request()->get('echostr','');
-      if($this->checkSignature() && !empty($echostr)){
-         echo $echostr;
-      }
-   }
 
-	private function checkSignature()
-	{
-	    $signature = $_GET["signature"];
-	    $timestamp = $_GET["timestamp"];
-	    $nonce = $_GET["nonce"];
-	   
-	    $token = "Token";
-	    $tmpArr = array($token, $timestamp, $nonce);
-	    sort($tmpArr, SORT_STRING);
-	    $tmpStr = implode( $tmpArr );
-	    $tmpStr = sha1( $tmpStr );
-	    
-	    if( $tmpStr == $signature ){
-	        return true;
-	    }else{
-	        return false;
-	    }
-
+//     public function token(){
+//      $echostr=request()->get('echostr','');
+//      if($this->checkSignature() && !empty($echostr)){
+//         echo $echostr;
+//      }
+//   }
+//
+//private function checkSignature()
+//{
+//    $signature = $_GET["signature"];
+//    $timestamp = $_GET["timestamp"];
+//    $nonce = $_GET["nonce"];
+//
+//    $token = "Token";
+//    $tmpArr = array($token, $timestamp, $nonce);
+//    sort($tmpArr, SORT_STRING);
+//    $tmpStr = implode( $tmpArr );
+//    $tmpStr = sha1( $tmpStr );
+//
+//    if( $tmpStr == $signature ){
+//        return true;
+//    }else{
+//        return false;
+//    }
+//
+//  }
 }
