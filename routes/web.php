@@ -21,4 +21,12 @@ Route::get('/info', function () {
 
 Route::get('/test1','TextController@test1');
 
-Route::get('/Token','IndexController@index');
+Route::any('/Token','IndexController@wxEvent');  //接受时间推送
+Route::get('/wx/token','IndexController@getAccessToken');  //获取token
+Route::post('/test2','IndexController@test2');
+
+Route::prefix('/test')->group(function(){
+    Route::get('/guzzle1','TextController@guzzle1');
+    Route::get('/guzzle2','TextController@guzzle2');
+    Route::get('/guzzle3','TextController@guzzle3');
+});
