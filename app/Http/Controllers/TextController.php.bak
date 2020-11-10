@@ -51,31 +51,9 @@ class TextController extends Controller
         //使用guzzle发送get请求
        //echo $url;
 
-       $response = $client->request('GET',$url,['verify'=>false]);
+       $response = $client->request('GET',$url,['verify'=>flase]);
        $json_str = $response->getBody();
        echo $json_str;
     }
 
-    public  function guzzle2(){
-//        $access_token=$this->getAccessToken();
-        $access_token="39_3tQRPRkHWsvxqw4Ey7cxFUisdq47QC3tuxcSxcuAnflBQxkmPpUAqYX59OmW-lMygmwFUlC5OCZemHhbzOMGbHpUoSAkEVL04QPTUkqV3ryDn5xFAht6Ihq6iDsaap0rukjmMegMnbXDPG7FVZRhACAKOG";
-        $type='image';
-        $url='https https://api.weixin.qq.com/cgi-bin/media/upload?access_token='.$access_token.'&type='.$type;
-        $client=new Client();
-        $response  =  $client->request ('POST' , '$url' , [
-
-            //上传的文件路径
-          //  'media' =>fopen('a.jpg','r'),
-                   'verify'      => false,
-                   'multipart'  =>[
-                       [
-                           'name'      => 'media' ,
-                           'contents'  =>  fopen('a.jpg','r')
-                       ]
-
-            ],
-         ]);
-        $data=$response->getBody();
-        echo $data;
-    }
 }

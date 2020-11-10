@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Log;
@@ -24,6 +25,15 @@ class IndexController extends Controller
         $tmpStr = sha1( $tmpStr );
         //验证通过
         if( $tmpStr == $signature ){
+
+            $client = new Client();
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
+            //使用guzzle发送get请求
+            //echo $url;
+
+            $response = $client->request('GET',$url,['verify'=>false]);
+            $json_str = $response->getBody();
+            echo $json_str;
             // 接收数据
             $xml_str=file_get_contents("php://input");
 //         //记录日志
@@ -91,6 +101,7 @@ class IndexController extends Controller
         }else{
             echo "";
         }
+        echo $this->responseMsg($data,$Content);
     }
 
     public function getAccessToken(){
@@ -99,20 +110,28 @@ class IndexController extends Controller
         $token=Redis::get($key);
         //dd($token);
          if($token){
-             echo "有缓存";
+             $token=Redis::get($key);
          }else{
-             echo "无缓存";
-             $url="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
-             $response=file_get_contents($url);
 
-             $data=json_decode($response,true);
+             $url="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
+//             $response=file_get_contents($url);
+//
+//             $data=json_decode($response,true);
+//             $token=$data['access_token'];
+             $client = new Client();
+             //使用guzzle发送get请求
+             //echo $url;
+
+             $response = $client->request('GET',$url,['verify'=>false]);
+             $json_str = $response->getBody();
+             $data=json_decode($json_str,true);
              $token=$data['access_token'];
 //             dd($token);
              //将token存在redis中   命名为$key 3600秒后过期
              Redis::set($key,$token);
              Redis::expire($key,3600);
          }
-       echo "access_token:".$token;
+       return $token;
     }
 
     public function test2(){
@@ -149,6 +168,26 @@ class IndexController extends Controller
         return $output;
     }
 
+    public  function guzzle2(){
+        $access_token =$this->getAccessToken();
+        $type='image';
+        $url='https://api.weixin.qq.com/cgi-bin/media/upload?access_token='.$access_token.'&type='.$type;
+        $client=new Client();
+        $response  =  $client->request ('POST' , $url, [
 
+            //上传的文件路径
+            //  'media' =>fopen('a.jpg','r'),
+            'verify'      => false,
+            'multipart'  =>[
+                [
+                    'name'      => 'media' ,
+                    'contents'  =>  fopen('a.jpg','r')
+                ]
+
+            ]
+        ]);
+        $data=$response->getBody();
+        echo $data;
+    }
 
 }

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-   // return view('welcome');
+    return view('welcome');
 });
 Route::get('/info', function () {
     // return view('welcome');
@@ -24,6 +24,7 @@ Route::get('/test1','TextController@test1');
 Route::any('/Token','IndexController@wxEvent');  //接受时间推送
 Route::get('/wx/token','IndexController@getAccessToken');  //获取token
 Route::post('/test2','IndexController@test2');
+Route::get('/guzzle2','IndexController@guzzle2');
 
 Route::prefix('/test')->group(function(){
     Route::get('/guzzle1','TextController@guzzle1');
