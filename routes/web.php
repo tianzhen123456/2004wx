@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 Route::get('/info', function () {
     // return view('welcome');
-    echo phpinfo();
+    echo "123";
 });
 
 Route::get('/test1','TextController@test1');
