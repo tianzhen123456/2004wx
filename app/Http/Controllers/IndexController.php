@@ -134,12 +134,12 @@ class IndexController extends Controller
        return $token;
     }
 
-    public function test2(){
-      // echo '<pre>';print_r($_GET);echo'</pre>';
-       // echo '<pre>';print_r($_POST);echo'</pre>';
-        //file_get_contents("php://input");
-
-    }
+//    public function test2(){
+//      // echo '<pre>';print_r($_GET);echo'</pre>';
+//       // echo '<pre>';print_r($_POST);echo'</pre>';
+//        //file_get_contents("php://input");
+//
+//    }
 
     public function responseMsg($array,$Content){
         $ToUserName = $array->FromUserName;
