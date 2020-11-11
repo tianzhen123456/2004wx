@@ -46,62 +46,107 @@ class IndexController extends Controller
            // dd($data);
 //            file_put_contents('wx_event.log',$data);die;
 
+//            if($data->MsgType=="event"){
+//                if($data->Event=="subscribe") {
+//                    $accesstoken = $this->getAccessToken();
+//                    $openid = $data->FromUserName;
+//                    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $accesstoken . "&openid=" . $openid . "&lang=zh_CN";
+//                    $user = json_decode($this->http_get($url), true);
+//                    if (isset($user['errcode'])) {
+//                        file_put_contents('wx_event.log', $user['errcode']);
+//                    } else {
+//                        if ($data->Event == "subscribe") {
+//                            $first = User::where("openid", $user['openid'])->first();
+//                            if ($first) {
+//                                $datas = [
+//                                    "subscribe" => 1,
+//                                    "openid" => $user["openid"],
+//                                    "nickname" => $user["nickname"],
+//                                    "sex" => $user["sex"],
+//                                    "city" => $user["city"],
+//                                    "country" => $user["country"],
+//                                    "province" => $user["province"],
+//                                    "language" => $user["language"],
+//                                    "headimgurl" => $user["headimgurl"],
+//                                    "subscribe_time" => $user["subscribe_time"],
+//                                    "subscribe_scene" => $user["subscribe_scene"],
+//                                ];
+//                                User::where("openid", $user['openid'])->update($datas);
+//                                $Content = "欢迎回来";
+//                            } else {
+//                                $post = new User();
+//                                $datas = [
+//                                    "subscribe" => $user["subscribe"],
+//                                    "openid" => $user["openid"],
+//                                    "nickname" => $user["nickname"],
+//                                    "sex" => $user["sex"],
+//                                    "city" => $user["city"],
+//                                    "country" => $user["country"],
+//                                    "province" => $user["province"],
+//                                    "language" => $user["language"],
+//                                    "headimgurl" => $user["headimgurl"],
+//                                    "subscribe_time" => $user["subscribe_time"],
+//                                    "subscribe_scene" => $user["subscribe_scene"],
+//                                ];
+//                                $name = $post->insert($datas);
+//                                $Content = "谢谢关注";
+//                            }
+//                        } else {
+//                            User::where("openid", $user['openid'])->update(["subscribe" => 0]);
+//                            $Content = "取关成功";
+//                        }
+//                    }
+//                }
+//            }
             if($data->MsgType=="event"){
-                if($data->Event=="subscribe") {
+                if($data->Event=="subscribe"){
                     $accesstoken = $this->getAccessToken();
                     $openid = $data->FromUserName;
-                    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $accesstoken . "&openid=" . $openid . "&lang=zh_CN";
-                    $user = json_decode($this->http_get($url), true);
-                    if (isset($user['errcode'])) {
-                        file_put_contents('wx_event.log', $user['errcode']);
-                    } else {
-                        if ($data->Event == "subscribe") {
-                            $first = User::where("openid", $user['openid'])->first();
-                            if ($first) {
-                                $datas = [
-                                    "subscribe" => 1,
-                                    "openid" => $user["openid"],
-                                    "nickname" => $user["nickname"],
-                                    "sex" => $user["sex"],
-                                    "city" => $user["city"],
-                                    "country" => $user["country"],
-                                    "province" => $user["province"],
-                                    "language" => $user["language"],
-                                    "headimgurl" => $user["headimgurl"],
-                                    "subscribe_time" => $user["subscribe_time"],
-                                    "subscribe_scene" => $user["subscribe_scene"],
-                                ];
-                                User::where("openid", $user['openid'])->update($datas);
-                                $Content = "欢迎回来";
-                            } else {
-                                $post = new User();
-                                $datas = [
-                                    "subscribe" => $user["subscribe"],
-                                    "openid" => $user["openid"],
-                                    "nickname" => $user["nickname"],
-                                    "sex" => $user["sex"],
-                                    "city" => $user["city"],
-                                    "country" => $user["country"],
-                                    "province" => $user["province"],
-                                    "language" => $user["language"],
-                                    "headimgurl" => $user["headimgurl"],
-                                    "subscribe_time" => $user["subscribe_time"],
-                                    "subscribe_scene" => $user["subscribe_scene"],
-                                ];
-                                $name = $post->insert($datas);
-                                $Content = "谢谢关注";
-                            }
-                        } else {
-                            User::where("openid", $user['openid'])->update(["subscribe" => 0]);
-                            $Content = "取关成功";
+                    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accesstoken."&openid=".$openid."&lang=zh_CN";
+                    $user = file_get_contents($url);
+                    $res = json_decode($user,true);
+                    if(isset($res['errcode'])){
+                        file_put_contents('wx_event.log',$res['errcode']);
+                    }else{
+                        $user_id = User_info::where('openid',$openid)->first();
+                        if($user_id){
+                            $user_id->subscribe=1;
+                            $user_id->save();
+                            $contentt = "感谢再次关注";
+                        }else{
+                            $res = [
+                                'subscribe'=>$res['subscribe'],
+                                'openid'=>$res['openid'],
+                                'nickname'=>$res['nickname'],
+                                'sex'=>$res['sex'],
+                                'city'=>$res['city'],
+                                'country'=>$res['country'],
+                                'province'=>$res['province'],
+                                'language'=>$res['language'],
+                                'headimgurl'=>$res['headimgurl'],
+                                'subscribe_time'=>$res['subscribe_time'],
+                                'subscribe_scene'=>$res['subscribe_scene']
+
+                            ];
+                            User_info::insert($res);
+                            $contentt = "欢迎老铁关注";
+
                         }
+
                     }
+                    echo $this->responseMsg($data,$contentt);
+
+                }
+                //取消关注
+                if($data->Event=='unsubscribe'){
+                    $user_id->subscribe=0;
+                    $user_id->save();
                 }
             }
         }else{
             echo "";
         }
-        echo $this->responseMsg($data,$Content);
+        //echo $this->responseMsg($data,$Content);
     }
 
     public function getAccessToken()
@@ -148,9 +193,9 @@ class IndexController extends Controller
 
     }
 
-    public function responseMsg($array,$Content){
-        $ToUserName = $array->FromUserName;
-        $FromUserName = $array->ToUserName;
+    public function responseMsg($data,$Content){
+        $ToUserName = $data->FromUserName;
+        $FromUserName = $data->ToUserName;
         $CreateTime = time();
         $MsgType = "text";
 
@@ -164,16 +209,16 @@ class IndexController extends Controller
         echo sprintf($text,$ToUserName,$FromUserName,$CreateTime,$MsgType,$Content);
     }
 
-       function http_get($url){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);//向那个url地址上面发送
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);//设置发送http请求时需不需要证书
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置发送成功后要不要输出1 不输出，0输出
-        $output = curl_exec($ch);//执行
-        curl_close($ch);    //关闭
-        return $output;
-    }
+//       function http_get($url){
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, $url);//向那个url地址上面发送
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);//设置发送http请求时需不需要证书
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置发送成功后要不要输出1 不输出，0输出
+//        $output = curl_exec($ch);//执行
+//        curl_close($ch);    //关闭
+//        return $output;
+//    }
 
     public  function guzzle2(){
         $access_token =$this->getAccessToken();
