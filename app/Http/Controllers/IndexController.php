@@ -31,9 +31,9 @@ class IndexController extends Controller
             //使用guzzle发送get请求
             //echo $url;
 
-            $response = $client->request('GET',$url,['verify'=>false]);
-            $json_str = $response->getBody();
-            echo $json_str;
+//            $response = $client->request('GET',$url,['verify'=>false]);
+//            $json_str = $response->getBody();
+//            echo $json_str;
             // 接收数据
             $xml_str=file_get_contents("php://input");
 //         //记录日志
@@ -104,36 +104,43 @@ class IndexController extends Controller
         echo $this->responseMsg($data,$Content);
     }
 
-    public function getAccessToken(){
-        //从redis中取出token
-        $key="access_token";
-        $token=Redis::get($key);
-        //dd($token);
-         if($token){
-             echo "有缓存";
-         }else{
+    public function getAccessToken()
+    {
 
-             $url="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
-             $response=file_get_contents($url);
+        $key = 'wx:access_token';
 
-             $data=json_decode($response,true);
-             $token=$data['access_token'];
-            // $client = new Client();
-             //使用guzzle发送get请求
-             //echo $url;
+        //检查是否有token
+        $token = Redis::get($key);
+        if ($token) {
+            echo "有缓存";
+            echo '</br>';
+            echo $token;
+        } else {
+            // echo "无缓存";
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" . env('WX_APPID') . "&secret=" . env('WX_APPSECRET');
+            //echo $url;die;
+            // $response = file_get_contents($url);
+            //echo $response;
 
-           //  $response = $client->request('GET',$url,['verify'=>false]);
-             //$json_str = $response->getBody();
-             //$data=json_decode($json_str,true);
-             // $token=$data['access_token'];
-     dd($token);
-             //将token存在redis中   命名为$key 3600秒后过期
-             Redis::set($key,$token);
-             Redis::expire($key,3600);
-         }
-       echo "access_token:".$token;
+            //使用guzzle发起get请求
+            $client = new Client(); //实例化 客户端
+            $response = $client->request('GET',$url,['verify'=>false]); //发起请求并接收响应
+            $json_str = $response->getBody();  //服务器的响应数据
+            //echo $json_str;die;
+
+            $data = json_decode($json_str, true);
+            $token = $data['access_token'];
+
+            //保存到redis中时间为3600
+
+            Redis::set($key, $token);
+            Redis::expire($key, 1000);
+        }
+
+
+        return $token;
+
     }
-
     public function test2(){
       // echo '<pre>';print_r($_GET);echo'</pre>';
        // echo '<pre>';print_r($_POST);echo'</pre>';
