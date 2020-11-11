@@ -46,58 +46,6 @@ class IndexController extends Controller
            // dd($data);
 //            file_put_contents('wx_event.log',$data);die;
 
-//            if($data->MsgType=="event"){
-//                if($data->Event=="subscribe") {
-//                    $accesstoken = $this->getAccessToken();
-//                    $openid = $data->FromUserName;
-//                    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" . $accesstoken . "&openid=" . $openid . "&lang=zh_CN";
-//                    $user = json_decode($this->http_get($url), true);
-//                    if (isset($user['errcode'])) {
-//                        file_put_contents('wx_event.log', $user['errcode']);
-//                    } else {
-//                        if ($data->Event == "subscribe") {
-//                            $first = User::where("openid", $user['openid'])->first();
-//                            if ($first) {
-//                                $datas = [
-//                                    "subscribe" => 1,
-//                                    "openid" => $user["openid"],
-//                                    "nickname" => $user["nickname"],
-//                                    "sex" => $user["sex"],
-//                                    "city" => $user["city"],
-//                                    "country" => $user["country"],
-//                                    "province" => $user["province"],
-//                                    "language" => $user["language"],
-//                                    "headimgurl" => $user["headimgurl"],
-//                                    "subscribe_time" => $user["subscribe_time"],
-//                                    "subscribe_scene" => $user["subscribe_scene"],
-//                                ];
-//                                User::where("openid", $user['openid'])->update($datas);
-//                                $Content = "欢迎回来";
-//                            } else {
-//                                $post = new User();
-//                                $datas = [
-//                                    "subscribe" => $user["subscribe"],
-//                                    "openid" => $user["openid"],
-//                                    "nickname" => $user["nickname"],
-//                                    "sex" => $user["sex"],
-//                                    "city" => $user["city"],
-//                                    "country" => $user["country"],
-//                                    "province" => $user["province"],
-//                                    "language" => $user["language"],
-//                                    "headimgurl" => $user["headimgurl"],
-//                                    "subscribe_time" => $user["subscribe_time"],
-//                                    "subscribe_scene" => $user["subscribe_scene"],
-//                                ];
-//                                $name = $post->insert($datas);
-//                                $Content = "谢谢关注";
-//                            }
-//                        } else {
-//                            User::where("openid", $user['openid'])->update(["subscribe" => 0]);
-//                            $Content = "取关成功";
-//                        }
-//                    }
-//                }
-//            }
             if($data->MsgType=="event"){
                 if($data->Event=="subscribe"){
                     $accesstoken = $this->getAccessToken();
@@ -143,10 +91,12 @@ class IndexController extends Controller
                     $user_id->save();
                 }
             }
+
+
+
         }else{
             echo "";
         }
-        //echo $this->responseMsg($data,$Content);
     }
 
     public function getAccessToken()
@@ -182,16 +132,46 @@ class IndexController extends Controller
             Redis::expire($key, 1000);
         }
 
-
         return $token;
 
     }
-    public function test2(){
-      // echo '<pre>';print_r($_GET);echo'</pre>';
-       // echo '<pre>';print_r($_POST);echo'</pre>';
-        //file_get_contents("php://input");
 
-    }
+    public function createMenu()
+    {
+        $menu = ' {
+             "button":[
+             {
+                  "type":"click",
+                  "name":"商城",
+                  "key":"V1001_TODAY_MUSIC"
+              },
+              {
+                   "name":"菜单",
+                   "sub_button":[
+                   {
+                       "type":"view",
+                       "name":"天气",
+                       "url":"http://www.soso.com/"
+                    },
+                    {
+                       "type":"click",
+                       "name":"图片",
+                       "key":"V1001_GOOD"
+                    }]
+               }]
+         }';
+        $access_token =$this->getAccessToken();
+        $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' . $access_token;
+
+          $client=new Client();
+          $response  =  $client->request ('POST' , $url, [
+              'verify'      => false,
+              'body'  =>json_decode($menu,JSON_UNESCAPED_UNICODE)
+          ]);
+          $data=$response->getBody();
+          echo $data;
+       }
+
 
     public function responseMsg($data,$Content){
         $ToUserName = $data->FromUserName;
