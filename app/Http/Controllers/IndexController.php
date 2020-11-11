@@ -162,7 +162,7 @@ class IndexController extends Controller
          }';
         $access_token =$this->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' . $access_token;
-        $res = curl($url, $menu);
+        $res = $this->curl($url, $menu);
         echo $res;
        }
 
@@ -183,17 +183,22 @@ class IndexController extends Controller
         echo sprintf($text,$ToUserName,$FromUserName,$CreateTime,$MsgType,$Content);
     }
 
-//       function http_get($url){
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, $url);//向那个url地址上面发送
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);//设置发送http请求时需不需要证书
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置发送成功后要不要输出1 不输出，0输出
-//        $output = curl_exec($ch);//执行
-//        curl_close($ch);    //关闭
-//        return $output;
-//    }
-
+    public function curl($url,$menu){
+        //1.初始化
+        $ch = curl_init();
+        //2.设置
+        curl_setopt($ch,CURLOPT_URL,$url);//设置提交地址
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,TRUE);//设置返回值返回字符串
+        curl_setopt($ch,CURLOPT_POST,1);//post提交方式
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$menu);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+        //3.执行
+        $output = curl_exec($ch);
+        //关闭
+        curl_close($ch);
+        return $output;
+    }
     public  function guzzle2(){
         $access_token =$this->getAccessToken();
         $type='image';
