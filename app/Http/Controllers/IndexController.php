@@ -110,36 +110,36 @@ class IndexController extends Controller
         $token=Redis::get($key);
         //dd($token);
          if($token){
-             $token=Redis::get($key);
+             echo "有缓存";
          }else{
 
              $url="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
-//             $response=file_get_contents($url);
-//
-//             $data=json_decode($response,true);
-//             $token=$data['access_token'];
-             $client = new Client();
+             $response=file_get_contents($url);
+
+             $data=json_decode($response,true);
+             $token=$data['access_token'];
+            // $client = new Client();
              //使用guzzle发送get请求
              //echo $url;
 
-             $response = $client->request('GET',$url,['verify'=>false]);
-             $json_str = $response->getBody();
-             $data=json_decode($json_str,true);
-             $token=$data['access_token'];
-//             dd($token);
+           //  $response = $client->request('GET',$url,['verify'=>false]);
+             //$json_str = $response->getBody();
+             //$data=json_decode($json_str,true);
+             // $token=$data['access_token'];
+     dd($token);
              //将token存在redis中   命名为$key 3600秒后过期
              Redis::set($key,$token);
              Redis::expire($key,3600);
          }
-       return $token;
+       echo "access_token:".$token;
     }
 
-//    public function test2(){
-//      // echo '<pre>';print_r($_GET);echo'</pre>';
-//       // echo '<pre>';print_r($_POST);echo'</pre>';
-//        //file_get_contents("php://input");
-//
-//    }
+    public function test2(){
+      // echo '<pre>';print_r($_GET);echo'</pre>';
+       // echo '<pre>';print_r($_POST);echo'</pre>';
+        //file_get_contents("php://input");
+
+    }
 
     public function responseMsg($array,$Content){
         $ToUserName = $array->FromUserName;
