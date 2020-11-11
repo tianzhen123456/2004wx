@@ -108,7 +108,7 @@ class IndexController extends Controller
                     if(isset($res['errcode'])){
                         file_put_contents('wx_event.log',$res['errcode']);
                     }else{
-                        $user_id = User_info::where('openid',$openid)->first();
+                        $user_id = User::where('openid',$openid)->first();
                         if($user_id){
                             $user_id->subscribe=1;
                             $user_id->save();
@@ -128,7 +128,7 @@ class IndexController extends Controller
                                 'subscribe_scene'=>$res['subscribe_scene']
 
                             ];
-                            User_info::insert($res);
+                            User::insert($res);
                             $contentt = "欢迎老铁关注";
 
                         }
