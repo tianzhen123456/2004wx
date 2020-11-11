@@ -26,6 +26,7 @@ Route::get('/wx/token','IndexController@getAccessToken');  //获取token
 Route::post('/test2','IndexController@test2');
 Route::get('/guzzle2','IndexController@guzzle2');
 Route::any('/createMenu','IndexController@createMenu');
+Route::any('/getWeather','IndexController@getWeather');
 
 Route::prefix('/test')->group(function(){
     Route::get('/guzzle1','TextController@guzzle1');

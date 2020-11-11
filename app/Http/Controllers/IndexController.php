@@ -77,7 +77,7 @@ class IndexController extends Controller
 
                             ];
                             User::insert($res);
-                            $contentt = "欢迎老铁关注";
+                            $contentt = "欢迎平民关注";
 
                         }
 
@@ -166,6 +166,21 @@ class IndexController extends Controller
         echo $res;
        }
 
+    public function getWeather()
+    {
+        $ip=request()->getClientIp();
+        //dd($ip);
+        $url = 'http://api.k780.com:88/?app=weather.future&weaid='.$ip.'&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json';
+        $weather = file_get_contents($url);
+        $weather = json_decode($weather,true);
+        if ($weather['success']) {
+            $content = '';
+            foreach ($weather['result'] as $v) {
+                $content .= '地区:' .$v['citynm'].'日期:' . $v['days'] . $v['week'] . ' 当日温度 : ' . $v['temperature'] . '天气:' . $v['weather'] . '风向:' . $v['wind'];
+            }
+        }
+        return  $content;
+    }
 
     public function responseMsg($data,$Content){
         $ToUserName = $data->FromUserName;
