@@ -162,14 +162,8 @@ class IndexController extends Controller
          }';
         $access_token =$this->getAccessToken();
         $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' . $access_token;
-
-          $client=new Client();
-          $response  =  $client->request ('POST' , $url, [
-              'verify'      => false,
-              'body'  =>json_decode($menu,JSON_UNESCAPED_UNICODE)
-          ]);
-          $data=$response->getBody();
-          echo $data;
+        $res = curl($url, $menu);
+        echo $res;
        }
 
 
