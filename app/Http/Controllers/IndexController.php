@@ -96,15 +96,44 @@ class IndexController extends Controller
 
         }else{
 
-            echo "";
+        //    echo "";
+
+            $this->BackCode();
+            //print_r($linShi);
         }
     }
 
+       public  function BackCode(){
+               //接收数据
+               $data = file_get_contents("php://input");
+               Log::info("=====接收数据====" . $data);
+               //转换成对象
+               $postarray = simplexml_load_string($data);
+               $access_token = $this->token();//获取token
+               if($postarray->MsgType=="text"){
+                   if($postarray->Content=="天气"){
+                       $Content = $this->getweather();
+                       $this->responseMsg($data,$Content);
+                   }
+               }
+           }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//获取token
     public function getAccessToken()
     {
-
         $key = 'wx:access_token';
-
         //检查是否有token
         $token = Redis::get($key);
         if ($token) {
@@ -136,7 +165,7 @@ class IndexController extends Controller
         return $token;
 
     }
-
+//自定义菜单
     public function createMenu()
     {
         $menu = ' {
@@ -167,7 +196,21 @@ class IndexController extends Controller
         echo $res;
        }
 
-
+    //3.回复天气模板
+    public function getweather($Content){
+        $city = $Content;
+        $url = "http://api.k780.com:88/?app=weather.future&weaid=beijing&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json";
+        $weather = file_get_contents($url);
+        $weather = json_decode($weather,true);
+        if($weather["success"]) {
+            $content = "";
+            foreach ($weather["result"] as $v) {
+                $content .= "\n"."地区:" . $v['citynm'] .","."日期:" . $v['days'] . $v['week'] .","."温度:" . $v['temperature'] .","."风速:" . $v['winp'] .","."天气:" . $v['weather'];
+            }
+        }
+        return $content;
+        Log::info("=====天气=====".$weather);
+    }
     //下载临时素材
     public function linShi(){
 
@@ -175,7 +218,7 @@ class IndexController extends Controller
         file_put_contents('wx_event.log',$xml);
         $data=simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA);
         $media_id=$data->MediaId;
-        //dd($media_id);die;
+        dd($media_id);die;
         $access_token = $this->token();
         $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=$access_token&media_id=$media_id";
 
@@ -214,6 +257,9 @@ class IndexController extends Controller
         curl_close($ch);
         return $output;
     }
+
+
+    //测试
     public  function guzzle2(){
         $access_token =$this->getAccessToken();
         $type='image';
