@@ -29,7 +29,7 @@ Route::prefix('/Token')->group(function(){
     Route::get('/guzzle2','IndexController@guzzle2');
     Route::any('/createMenu','IndexController@createMenu');
 
-    Route::any('/BackCode','IndexController@linShi');
+    Route::any('/BackCode','IndexController@BackCode');
 
 
     Route::any('/getweather','IndexController@getweather');
