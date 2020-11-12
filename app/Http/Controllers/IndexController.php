@@ -39,6 +39,7 @@ class IndexController extends Controller
                     //getToken();
                     $this->wxEvent();
                     $this->createMenu();
+                    $this->callBack();
                 }
 
                             /**
@@ -137,13 +138,13 @@ class IndexController extends Controller
 
                      public function callBack(){
                          $xml_str=file_get_contents("php://input");
-//                         file_put_contents('wx_event.log',$xml_str);
+                       file_put_contents('wx_event.log',$xml_str);
                          Log::info("====天气====".$xml_str);
 
                          $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
                          if($data->MsgType=="text"){
                              if($data->Content=="天气"){
-                                 echo '123';
+                                echo '123';
                                  die;
 
                                  $Content = $this->getweather();
