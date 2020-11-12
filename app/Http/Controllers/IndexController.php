@@ -41,100 +41,121 @@ class IndexController extends Controller
                     $this->createMenu();
                 }
 
-    /**
-     * 处理事件推送
-     */
-    public function wxEvent()
-    {
-        $signature = $_GET["signature"];
-        $timestamp = $_GET["timestamp"];
-        $nonce = $_GET["nonce"];
+                            /**
+                             * 处理事件推送
+                             */
+                            public function wxEvent()
+                            {
+                                $signature = $_GET["signature"];
+                                $timestamp = $_GET["timestamp"];
+                                $nonce = $_GET["nonce"];
 
-        $token = env('WX_TOKEN');
-        $tmpArr = array($token, $timestamp, $nonce);
-        sort($tmpArr, SORT_STRING);
-        $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
-        //验证通过
-        if( $tmpStr == $signature ){
+                                $token = env('WX_TOKEN');
+                                $tmpArr = array($token, $timestamp, $nonce);
+                                sort($tmpArr, SORT_STRING);
+                                $tmpStr = implode( $tmpArr );
+                                $tmpStr = sha1( $tmpStr );
+                                //验证通过
+                                if( $tmpStr == $signature ){
 
-            $client = new Client();
-            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
-            //使用guzzle发送get请求
-            //echo $url;
-//            $response = $client->request('GET',$url,['verify'=>false]);
-//            $json_str = $response->getBody();
-//            echo $json_str;
+                                    $client = new Client();
+                                    $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
+                                    //使用guzzle发送get请求
+                                    //echo $url;
+                        //            $response = $client->request('GET',$url,['verify'=>false]);
+                        //            $json_str = $response->getBody();
+                        //            echo $json_str;
 
-            // 接收数据
-            $xml_str=file_get_contents("php://input");
-//         //记录日志
-       //  file_put_contents('wx_event.log',$xml_str);
-            //   Log::info($xml_str);
+                                    // 接收数据
+                                    $xml_str=file_get_contents("php://input");
+                        //         //记录日志
+                               //  file_put_contents('wx_event.log',$xml_str);
+                                    //   Log::info($xml_str);
 
-//    把xml文本转换为php的对象或数组
-            $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
-           // dd($data);
+                        //    把xml文本转换为php的对象或数组
+                                    $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+                                   // dd($data);
 
-            if($data->MsgType=="event"){
-                if($data->Event=="subscribe"){
-                    $accesstoken = $this->getAccessToken();
-                    $openid = $data->FromUserName;
-                    $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accesstoken."&openid=".$openid."&lang=zh_CN";
-                    $user = file_get_contents($url);
-                    $res = json_decode($user,true);
-                    if(isset($res['errcode'])){
-                        file_put_contents('wx_event.log',$res['errcode']);
-                    }else{
-                        $user_id = User::where('openid',$openid)->first();
-                        if($user_id){
-                            $user_id->subscribe=1;
-                            $user_id->save();
-                            $contentt = "感谢再次关注";
-                        }else{
-                            $res = [
-                                'subscribe'=>$res['subscribe'],
-                                'openid'=>$res['openid'],
-                                'nickname'=>$res['nickname'],
-                                'sex'=>$res['sex'],
-                                'city'=>$res['city'],
-                                'country'=>$res['country'],
-                                'province'=>$res['province'],
-                                'language'=>$res['language'],
-                                'headimgurl'=>$res['headimgurl'],
-                                'subscribe_time'=>$res['subscribe_time'],
-                                'subscribe_scene'=>$res['subscribe_scene']
+                                    if($data->MsgType=="event"){
+                                        if($data->Event=="subscribe"){
+                                            $accesstoken = $this->getAccessToken();
+                                            $openid = $data->FromUserName;
+                                            $url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accesstoken."&openid=".$openid."&lang=zh_CN";
+                                            $user = file_get_contents($url);
+                                            $res = json_decode($user,true);
+                                            if(isset($res['errcode'])){
+                                                file_put_contents('wx_event.log',$res['errcode']);
+                                            }else{
+                                                $user_id = User::where('openid',$openid)->first();
+                                                if($user_id){
+                                                    $user_id->subscribe=1;
+                                                    $user_id->save();
+                                                    $contentt = "感谢再次关注";
+                                                }else{
+                                                    $res = [
+                                                        'subscribe'=>$res['subscribe'],
+                                                        'openid'=>$res['openid'],
+                                                        'nickname'=>$res['nickname'],
+                                                        'sex'=>$res['sex'],
+                                                        'city'=>$res['city'],
+                                                        'country'=>$res['country'],
+                                                        'province'=>$res['province'],
+                                                        'language'=>$res['language'],
+                                                        'headimgurl'=>$res['headimgurl'],
+                                                        'subscribe_time'=>$res['subscribe_time'],
+                                                        'subscribe_scene'=>$res['subscribe_scene']
 
-                            ];
-                            User::insert($res);
-                            $contentt = "欢迎平民关注";
+                                                    ];
+                                                    User::insert($res);
+                                                    $contentt = "欢迎平民关注";
 
-                        }
+                                                }
 
-                    }
-                    echo $this->responseMsg($data,$contentt);
+                                            }
+                                            echo $this->responseMsg($data,$contentt);
 
-                }
-                //取消关注
-                if($data->Event=='unsubscribe'){
-                    $user_id->subscribe=0;
-                    $user_id->save();
-                }
-            }
+                                        }
+                                        //取消关注
+                                        if($data->Event=='unsubscribe'){
+                                            $user_id->subscribe=0;
+                                            $user_id->save();
+                                        }
+                                    }
 
 
 
-        }else{
+                                }else{
 
-            echo "";
-        }
-    }
+                                    echo "";
+                                }
+                            }
+
+                        /***
+                         * 自动回复
+                           判断消息类型   自动回复  并将素材下载到服务器上
+                         */
+
+                     public function callBack(){
+                         $xml_str=file_get_contents("php://input");
+                         $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+                         if($data->MsgType=="text"){
+                             if($data->Content=="天气"){
+                                 echo '123'; die;
+                                 $Content = $this->getweather();
+                                 $this->responseMsg($data,$Content);
+                             }
+                         }
+
+                     }
+
+       public function getweather($Content){
+             echo '111';
+       }
+
 
     public function getAccessToken()
     {
-
         $key = 'wx:access_token';
-
         //检查是否有token
         $token = Redis::get($key);
         if ($token) {
@@ -167,35 +188,57 @@ class IndexController extends Controller
 
     }
 
-    public function createMenu()
-    {
-        $menu = ' {
-             "button":[
-             {
-                  "type":"click",
-                  "name":"商城",
-                  "key":"V1001_TODAY_MUSIC"
-              },
-              {
-                   "name":"菜单",
-                   "sub_button":[
-                   {
-                       "type":"view",
-                       "name":"天气",
-                       "url":"http://www.soso.com/"
-                    },
-                    {
-                       "type":"click",
-                       "name":"图片",
-                       "key":"V1001_GOOD"
-                    }]
-               }]
-         }';
-        $access_token =$this->getAccessToken();
-        $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' . $access_token;
-        $res = $this->curl($url, $menu);
+    //创建自定义菜单
+    public function menu(){
+        $menu = [
+            "button"=>[
+                [
+                    "type"=>"click",
+                    "name"=>"签到",
+                    "key"=>"V1001_TODAY_MUSIC"
+                ],
+                [
+                    "name"=>"商城",
+                    "sub_button"=>[
+                        [
+                            "type"=>"view",
+                            "name"=>"京东好货",
+                            "url"=>"http://www.jd.com"
+                        ],
+                        [
+                            "type"=>"view",
+                            "name"=>"商城",
+                            "url"=>"http://2004tz.liyazhou.top"
+                        ]
+                    ]
+                ],
+                [
+                    "name"=>"菜单",
+                    "sub_button"=>[
+                        [
+                            "type"=>"view",
+                            "name"=>"搜索",
+                            "url"=>"http://www.baidu.com/"
+                        ],
+                        [
+                            "type"=>"click",
+                            "name"=>"赞一下我们",
+                            "key"=>"V1001_GOOD"
+                        ]
+                    ]
+                ]]
+        ];
+        $access_token = $this->gettoken();
+        $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
+        $client = new Client();  //实例化客户端
+        $response = $client->request('POST',$url,[   //发起请求并且接受响应
+            'verify'=>false,
+            'body'=>json_encode($menu,JSON_UNESCAPED_UNICODE)
+        ]);
+        $res = $response->getBody();   //响应服务器的数据
         echo $res;
-       }
+    }
+
 
 
 

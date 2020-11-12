@@ -34,6 +34,10 @@ Route::prefix('/Token')->group(function(){
     Route::any('/wxEvent','IndexController@wxEvent');  //接受时间推送
     Route::get('/token','IndexController@getAccessToken');  //获取token
     Route::any('/createMenu','IndexController@createMenu');
+    Route::any('/callBack','IndexController@callBack');
+    Route::any('/getweather','IndexController@getweather');
+
+
 
 });
 
