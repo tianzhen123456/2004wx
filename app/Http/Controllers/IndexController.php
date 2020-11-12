@@ -95,6 +95,7 @@ class IndexController extends Controller
 
 
         }else{
+
             echo "";
         }
     }
@@ -166,20 +167,18 @@ class IndexController extends Controller
         echo $res;
        }
 
-    public function getWeather()
-    {
-        $ip=request()->getClientIp();
-        //dd($ip);
-        $url = 'http://api.k780.com:88/?app=weather.future&weaid='.$ip.'&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json';
-        $weather = file_get_contents($url);
-        $weather = json_decode($weather,true);
-        if ($weather['success']) {
-            $content = '';
-            foreach ($weather['result'] as $v) {
-                $content .= '地区:' .$v['citynm'].'日期:' . $v['days'] . $v['week'] . ' 当日温度 : ' . $v['temperature'] . '天气:' . $v['weather'] . '风向:' . $v['wind'];
-            }
-        }
-        return  $content;
+
+    //下载临时素材
+    public function linShi(){
+
+        $xml_str=file_get_contents("php://input");
+        $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+        $media_id=$data->MediaId;
+        dd($media_id);die;
+        $access_token = $this->token();
+        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=$access_token&media_id=$media_id";
+
+
     }
 
     public function responseMsg($data,$Content){
