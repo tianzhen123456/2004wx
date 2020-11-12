@@ -9,6 +9,28 @@ use Log;
 use App\models\User;
 class IndexController extends Controller
 {
+          //微信接入
+            public function index()
+            {
+                $signature = $_GET["signature"];
+                $timestamp = $_GET["timestamp"];
+                $nonce = $_GET["nonce"];
+
+                $token = env('WX_TOKEN');
+                $tmpArr = array($token, $timestamp, $nonce);
+                sort($tmpArr, SORT_STRING);
+                $tmpStr = implode( $tmpArr );
+                $tmpStr = sha1( $tmpStr );
+
+                if( $tmpStr == $signature ){
+                    echo $_GET['echostr'];
+                }else{
+                    echo '123';
+                }
+            }
+
+
+
     /**
      * 处理事件推送
      */
@@ -30,21 +52,19 @@ class IndexController extends Controller
             $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
             //使用guzzle发送get请求
             //echo $url;
-
 //            $response = $client->request('GET',$url,['verify'=>false]);
 //            $json_str = $response->getBody();
 //            echo $json_str;
+
             // 接收数据
             $xml_str=file_get_contents("php://input");
 //         //记录日志
        //  file_put_contents('wx_event.log',$xml_str);
-////            Log::info($xml_str);
-//            echo "";
-//            die;
-        //    把xml文本转换为php的对象或数组
+            //   Log::info($xml_str);
+
+//    把xml文本转换为php的对象或数组
             $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
            // dd($data);
-//            file_put_contents('wx_event.log',$data);die;
 
             if($data->MsgType=="event"){
                 if($data->Event=="subscribe"){
@@ -167,20 +187,7 @@ class IndexController extends Controller
         echo $res;
        }
 
-
-    //下载临时素材
-    public function linShi(){
-
-        $xml=file_get_contents("php://input");
-        file_put_contents('wx_event.log',$xml);
-        $data=simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA);
-        $media_id=$data->MediaId;
-        dd($media_id);die;
-        $access_token = $this->token();
-        $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=$access_token&media_id=$media_id";
-
-
-    }
+       
 
     public function responseMsg($data,$Content){
         $ToUserName = $data->FromUserName;
