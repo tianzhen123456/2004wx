@@ -171,10 +171,11 @@ class IndexController extends Controller
     //下载临时素材
     public function linShi(){
 
-        $xml_str=file_get_contents("php://input");
-        $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+        $xml=file_get_contents("php://input");
+        file_put_contents('wx_event.log',$xml);
+        $data=simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA);
         $media_id=$data->MediaId;
-        dd($media_id);die;
+        //dd($media_id);die;
         $access_token = $this->token();
         $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=$access_token&media_id=$media_id";
 
