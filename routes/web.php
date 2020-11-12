@@ -30,7 +30,7 @@ Route::get('/test1','TextController@test1');
 
 
 Route::prefix('/Token')->group(function(){
-    Route::any('/','IndexController@index');  //微信接入
+    Route::any('/','IndexController@index');  //执行微信
     Route::any('/wxEvent','IndexController@wxEvent');  //接受时间推送
     Route::get('/token','IndexController@getAccessToken');  //获取token
     Route::any('/createMenu','IndexController@createMenu');

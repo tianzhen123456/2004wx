@@ -10,7 +10,7 @@ use App\models\User;
 class IndexController extends Controller
 {
           //微信接入
-            public function index()
+            public function checkSignature()
             {
                 $signature = $_GET["signature"];
                 $timestamp = $_GET["timestamp"];
@@ -28,8 +28,18 @@ class IndexController extends Controller
                     echo '123';
                 }
             }
-
-
+              //执行微信方法
+                public function index()
+                {
+            //        $result = $this->checkSignature();
+            //        if($result){
+            //            echo $_GET['echostr'];
+            //            exit;
+            //        }
+                    //getToken();
+                    $this->wxEvent();
+                    $this->createMenu();
+                }
 
     /**
      * 处理事件推送
@@ -187,7 +197,7 @@ class IndexController extends Controller
         echo $res;
        }
 
-       
+
 
     public function responseMsg($data,$Content){
         $ToUserName = $data->FromUserName;
