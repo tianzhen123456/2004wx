@@ -61,8 +61,13 @@ class IndexController extends Controller
                                 //验证通过
                                 if( $tmpStr == $signature ){
 
-//                                    $client = new Client();
-//                                    $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
+                                    $client = new Client();
+                                    $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
+                                    //使用guzzle发送get请求
+                                    //echo $url;
+                        //            $response = $client->request('GET',$url,['verify'=>false]);
+                        //            $json_str = $response->getBody();
+                        //            echo $json_str;
 
                                     // 接收数据
                                     $xml_str=file_get_contents("php://input");
@@ -133,22 +138,19 @@ class IndexController extends Controller
                            判断消息类型   自动回复  并将素材下载到服务器上
                          */
 
-                     public function callBack($data){
-//                      //   echo '123';die;
-//                         $xml_str=file_get_contents("php://input");
-//                        // Log::info("====天气====".$xml_str);
-//
-//                         $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+                     public function callBack(){
+                      //   echo '123';die;
+                         $xml_str=file_get_contents("php://input");
+                        // Log::info("====天气====".$xml_str);
+
+                         $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
                          if($data->MsgType=="text"){
                              if($data->Content=="天气"){
                                  $Content = $this->getweather();
                                  $this->responseMsg($data,$Content);
                              }
-                         }
-
-                         //判断是否是图片信息
-
-                         if($data->MsgType=="image"){
+                             //判断是否是图片信息
+                         }else  if($data->MsgType=="image"){
                              $data = [
                                  "tousername"=>$data->ToUserName,
                                  "fromusername"=>$data->FromUserName,
@@ -166,6 +168,7 @@ class IndexController extends Controller
 //                             $get = file_get_contents($url);
 //                             file_put_contents("image.jpg",$get);
                          }
+                         
 
                      }
 
