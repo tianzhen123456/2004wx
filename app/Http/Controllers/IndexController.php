@@ -171,6 +171,8 @@ class IndexController extends Controller
                              $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
                              $get = file_get_contents($url);
                              file_put_contents("image.jpg",$get);
+                             $Content = "";
+                             $this->responseMsg($data,$Content);
                          }
 
 
