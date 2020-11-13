@@ -139,7 +139,7 @@ class IndexController extends Controller
                      public function callBack(){
                       //   echo '123';die;
                          $xml_str=file_get_contents("php://input");
-                       //file_put_contents('wx_event.log',$xml_str);
+                         file_put_contents('wx_event.log',$xml_str);
                         // Log::info("====天气====".$xml_str);
 
                          $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
@@ -150,11 +150,27 @@ class IndexController extends Controller
                              }
                          }
 
+                         //判断是否是图片信息
+                         $data = [];
+                         if($data->MsgType=="image"){
+                             echo '"123"';die;
+//                             $data[] = [
+//                                 "FromUserName" => $data->FromUserName,
+//                                 "CreateTime" => $postarray->CreateTime,
+//                                 "MsgType" => $postarray->MsgType,
+//                                 "PicUrl" => $postarray->PicUrl,
+//                                 "MediaId" => $postarray->MediaId,
+//                             ];
+//                             $image = new MenueUser();
+//                             $image->insert($data);
+//                             $this->menuxiazai($postarray->MediaId);
+                         }
+
                      }
 
                 public function getweather()
                 {
-                    $ip=request()->getClientIp();
+                    $ip='123.125.71.38';
                     $url = 'http://api.k780.com:88/?app=weather.future&weaid='.$ip.'&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json';
                     $weather = file_get_contents($url);
                     $weather = json_decode($weather,true);
