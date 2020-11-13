@@ -72,7 +72,7 @@ class IndexController extends Controller
                                     // 接收数据
                                     $xml_str=file_get_contents("php://input");
                         //         //记录日志
-                               //  file_put_contents('wx_event.log',$xml_str);
+                                 file_put_contents('wx_event.log',$xml_str);
                                     //   Log::info($xml_str);
 
                         //    把xml文本转换为php的对象或数组
@@ -141,7 +141,6 @@ class IndexController extends Controller
                      public function callBack(){
                       //   echo '123';die;
                          $xml_str=file_get_contents("php://input");
-                         file_put_contents('wx_event.log',$xml_str);
                         // Log::info("====天气====".$xml_str);
 
                          $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
@@ -153,9 +152,9 @@ class IndexController extends Controller
                          }
 
                          //判断是否是图片信息
-                         $data = [];
+
                          if($data->MsgType=="image"){
-                             $data[]= [
+                             $data = [
                                  "tousername"=>$data->ToUserName,
                                  "fromusername"=>$data->FromUserName,
                                  "createtime"=>$data->CreateTime,
