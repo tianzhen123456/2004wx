@@ -61,13 +61,8 @@ class IndexController extends Controller
                                 //验证通过
                                 if( $tmpStr == $signature ){
 
-                                    $client = new Client();
-                                    $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
-                                    //使用guzzle发送get请求
-                                    //echo $url;
-                        //            $response = $client->request('GET',$url,['verify'=>false]);
-                        //            $json_str = $response->getBody();
-                        //            echo $json_str;
+//                                    $client = new Client();
+//                                    $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".env('WX_APPID')."&secret=".env('WX_APPSECRET');
 
                                     // 接收数据
                                     $xml_str=file_get_contents("php://input");
