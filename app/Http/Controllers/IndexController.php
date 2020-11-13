@@ -155,16 +155,22 @@ class IndexController extends Controller
                          //判断是否是图片信息
                          $data = [];
                          if($data->MsgType=="image"){
-                             $data[] = [
-                                 "FromUserName" => $data->FromUserName,
-                                 "CreateTime" => $data->CreateTime,
-                                 "MsgType" => $data->MsgType,
-                                 "PicUrl" => $data->PicUrl,
-                                 "MediaId" => $data->MediaId,
+                             $data[]= [
+                                 "tousername"=>$data->ToUserName,
+                                 "fromusername"=>$data->FromUserName,
+                                 "createtime"=>$data->CreateTime,
+                                 "msgtype"=>$data->MsgType,
+                                 "picurl"=>$data->PicUrl,
+                                 "msgid" =>$data->MsgId,
+                                 "mediaid"=>$data->MediaId,
                              ];
                              $image = new UserInfo();
                              $image->insert($data);
-//                             $this->menuxiazai($postarray->MediaId);
+
+//                             $access_token = $this->getAccessToken();
+//                             $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
+//                             $get = file_get_contents($url);
+//                             file_put_contents("image.jpg",$get);
                          }
 
                      }
