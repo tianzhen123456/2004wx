@@ -206,7 +206,7 @@ class IndexController extends Controller
     }
 
     //创建自定义菜单
-    public function menu(){
+    public function createMenu(){
         $menu = [
             "button"=>[
                 [
