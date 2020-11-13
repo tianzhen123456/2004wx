@@ -161,7 +161,10 @@ class IndexController extends Controller
                                  "mediaid"=>$data->MediaId,
                              ];
                              $image = new UserInfo();
-                             $image->insert($data);
+                             $images = UserInfo::where('picurl',$data['picurl'])->first();
+                             if(!$images){
+                                 $images=$image->insert($data);
+                             }
 
                              $access_token = $this->getAccessToken();
 //                             file_put_contents('wx_event.log',$access_token,FILE_APPEND);
