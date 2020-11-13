@@ -138,12 +138,12 @@ class IndexController extends Controller
                            判断消息类型   自动回复  并将素材下载到服务器上
                          */
 
-                     public function callBack(){
-                      //   echo '123';die;
-                         $xml_str=file_get_contents("php://input");
-                        // Log::info("====天气====".$xml_str);
-
-                         $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
+                     public function callBack($data){
+//                      //   echo '123';die;
+//                         $xml_str=file_get_contents("php://input");
+//                        // Log::info("====天气====".$xml_str);
+//
+//                         $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
                          if($data->MsgType=="text"){
                              if($data->Content=="天气"){
                                  $Content = $this->getweather();
