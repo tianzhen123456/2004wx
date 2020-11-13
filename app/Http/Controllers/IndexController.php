@@ -151,7 +151,7 @@ class IndexController extends Controller
                              }
                              //判断是否是图片信息
                          }else  if($data->MsgType=="image"){
-                             $data = [
+                             $datas = [
                                  "tousername"=>$data->ToUserName,
                                  "fromusername"=>$data->FromUserName,
                                  "createtime"=>$data->CreateTime,
@@ -161,9 +161,9 @@ class IndexController extends Controller
                                  "mediaid"=>$data->MediaId,
                              ];
                              $image = new UserInfo();
-                             $images = UserInfo::where('picurl',$data['picurl'])->first();
+                             $images = UserInfo::where('picurl',$datas['picurl'])->first();
                              if(!$images){
-                                 $images=$image->insert($data);
+                                 $images=$image->insert($datas);
                              }
 
                              $access_token = $this->getAccessToken();
