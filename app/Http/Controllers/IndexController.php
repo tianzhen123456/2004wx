@@ -164,6 +164,7 @@ class IndexController extends Controller
                              $image->insert($data);
 
                              $access_token = $this->getAccessToken();
+                             file_put_contents('wx_event.log',$access_token,FILE_APPEND);
                              $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
                              $get = file_get_contents($url);
                              file_put_contents("image.jpg",$get);
