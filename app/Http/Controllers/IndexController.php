@@ -154,9 +154,20 @@ class IndexController extends Controller
 
                      }
 
-//       public function getweather($Content){
-//             echo '111';
-//       }
+                public function getweather()
+                {
+                    $ip=request()->getClientIp();
+                    $url = 'http://api.k780.com:88/?app=weather.future&weaid='.$ip.'&&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json';
+                    $weather = file_get_contents($url);
+                    $weather = json_decode($weather,true);
+                    if ($weather['success']) {
+                        $Content = '';
+                        foreach ($weather['result'] as $v) {
+                            $Content .= '地区:' .$v['citynm'].'日期:' . $v['days'] . $v['week'] . ' 当日温度 : ' . $v['temperature'] . '天气:' . $v['weather'] . '风向:' . $v['wind'];
+                        }
+                    }
+                    return  $Content;
+                }
 
 
     public function getAccessToken()
