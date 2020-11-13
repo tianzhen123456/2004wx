@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Log;
 use App\models\User;
+use App\models\UserInfo;
+
 class IndexController extends Controller
 {
           //微信接入
@@ -150,20 +152,20 @@ class IndexController extends Controller
                              }
                          }
 
-//                         //判断是否是图片信息
-//                         $data = [];
-//                         if($data->MsgType=="image"){
-//                             $data[] = [
-//                                 "FromUserName" => $data->FromUserName,
-//                                 "CreateTime" => $data->CreateTime,
-//                                 "MsgType" => $data->MsgType,
-//                                 "PicUrl" => $data->PicUrl,
-//                                 "MediaId" => $data->MediaId,
-//                             ];
-////                             $image = new MenueUser();
-////                             $image->insert($data);
-////                             $this->menuxiazai($postarray->MediaId);
-//                         }
+                         //判断是否是图片信息
+                         $data = [];
+                         if($data->MsgType=="image"){
+                             $data[] = [
+                                 "FromUserName" => $data->FromUserName,
+                                 "CreateTime" => $data->CreateTime,
+                                 "MsgType" => $data->MsgType,
+                                 "PicUrl" => $data->PicUrl,
+                                 "MediaId" => $data->MediaId,
+                             ];
+                             $image = new UserInfo();
+                             $image->insert($data);
+//                             $this->menuxiazai($postarray->MediaId);
+                         }
 
                      }
 
