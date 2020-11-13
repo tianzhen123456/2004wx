@@ -150,21 +150,20 @@ class IndexController extends Controller
                              }
                          }
 
-                         //判断是否是图片信息
-                         $data = [];
-                         if($data->MsgType=="image"){
-                             echo '"123"';die;
+//                         //判断是否是图片信息
+//                         $data = [];
+//                         if($data->MsgType=="image"){
 //                             $data[] = [
 //                                 "FromUserName" => $data->FromUserName,
-//                                 "CreateTime" => $postarray->CreateTime,
-//                                 "MsgType" => $postarray->MsgType,
-//                                 "PicUrl" => $postarray->PicUrl,
-//                                 "MediaId" => $postarray->MediaId,
+//                                 "CreateTime" => $data->CreateTime,
+//                                 "MsgType" => $data->MsgType,
+//                                 "PicUrl" => $data->PicUrl,
+//                                 "MediaId" => $data->MediaId,
 //                             ];
-//                             $image = new MenueUser();
-//                             $image->insert($data);
-//                             $this->menuxiazai($postarray->MediaId);
-                         }
+////                             $image = new MenueUser();
+////                             $image->insert($data);
+////                             $this->menuxiazai($postarray->MediaId);
+//                         }
 
                      }
 
