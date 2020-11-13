@@ -245,7 +245,7 @@ class IndexController extends Controller
                     ]
                 ]]
         ];
-        $access_token = $this->gettoken();
+        $access_token = $this->getAccessToken();
         $url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token;
         $client = new Client();  //实例化客户端
         $response = $client->request('POST',$url,[   //发起请求并且接受响应
