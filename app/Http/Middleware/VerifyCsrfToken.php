@@ -22,6 +22,7 @@ class VerifyCsrfToken extends Middleware
 
         '/Token',
         '/test2',
+        '/Token/callBack',
         '/createMenu',
         '/getWeather'
     ];
