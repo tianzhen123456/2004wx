@@ -165,13 +165,21 @@ class IndexController extends Controller
                              if(!$images){
                                  $images=$image->insert($datas);
                              }
-
+                         //存入线上public中
                              $access_token = $this->getAccessToken();
 //                             file_put_contents('wx_event.log',$access_token,FILE_APPEND);
                              $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
                              $get = file_get_contents($url);
                              file_put_contents("image.jpg",$get);
-                             $Content = "好了楞田珍";
+                             $Content = "是图片哦~";
+                             $this->responseMsg($data,$Content);
+                         }else if($data->MsgType=="voice"){
+                             $access_token = $this->getAccessToken();
+//                             file_put_contents('wx_event.log',$access_token,FILE_APPEND);
+                             $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
+                             $get = file_get_contents($url);
+                             file_put_contents("image.jpg",$get);
+                             $Content = "是语音哦~";
                              $this->responseMsg($data,$Content);
                          }
 
