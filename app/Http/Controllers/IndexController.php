@@ -138,58 +138,76 @@ class IndexController extends Controller
                            判断消息类型   自动回复  并将素材下载到服务器上
                          */
 
-                     public function callBack(){
-                      //   echo '123';die;
-                         $xml_str=file_get_contents("php://input");
-                        // Log::info("====天气====".$xml_str);
+                     public function callBack()
+                     {
+                         //   echo '123';die;
+                         $xml_str = file_get_contents("php://input");
+                         // Log::info("====天气====".$xml_str);
 
-                         $data=simplexml_load_string($xml_str,'SimpleXMLElement',LIBXML_NOCDATA);
-                         if($data->MsgType=="text"){
-                             if($data->Content=="天气"){
+                         $data = simplexml_load_string($xml_str, 'SimpleXMLElement', LIBXML_NOCDATA);
+                         if ($data->MsgType == "text") {
+                             if ($data->Content == "天气") {
                                  $Content = $this->getweather();
-                                 $this->responseMsg($data,$Content);
+                                 $this->responseMsg($data, $Content);
                              }
                              //判断是否是图片信息
-                         }else  if($data->MsgType=="image"){
+                         } else if ($data->MsgType == "image") {
                              $datas = [
-                                 "tousername"=>$data->ToUserName,
-                                 "fromusername"=>$data->FromUserName,
-                                 "createtime"=>$data->CreateTime,
-                                 "msgtype"=>$data->MsgType,
-                                 "picurl"=>$data->PicUrl,
-                                 "msgid" =>$data->MsgId,
-                                 "mediaid"=>$data->MediaId,
+                                 "tousername" => $data->ToUserName,
+                                 "fromusername" => $data->FromUserName,
+                                 "createtime" => $data->CreateTime,
+                                 "msgtype" => $data->MsgType,
+                                 "picurl" => $data->PicUrl,
+                                 "msgid" => $data->MsgId,
+                                 "mediaid" => $data->MediaId,
                              ];
                              $image = new UserInfo();
-                             $images = UserInfo::where('picurl',$datas['picurl'])->first();
-                             if(!$images){
-                                 $images=$image->insert($datas);
+                             $images = UserInfo::where('picurl', $datas['picurl'])->first();
+                             if (!$images) {
+                                 $images = $image->insert($datas);
                              }
-                         //存入线上public中
+                             //存入线上public中
                              $access_token = $this->getAccessToken();
 //                             file_put_contents('wx_event.log',$access_token,FILE_APPEND);
-                             $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
+                             $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" . $access_token . "&media_id=" . $data->MediaId;
                              $get = file_get_contents($url);
-                             file_put_contents("image.jpg",$get);
+                             file_put_contents("image.jpg", $get);
                              $Content = "是图片哦~";
-                             $this->responseMsg($data,$Content);
-                         }else if($data->MsgType=="voice"){
+                             $this->responseMsg($data, $Content);
+                         } else if ($data->MsgType == "voice") {
                              $access_token = $this->getAccessToken();
-                             Log::info("====语音====".$access_token);
-                             $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
+                             Log::info("====语音====" . $access_token);
+                             $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" . $access_token . "&media_id=" . $data->MediaId;
                              $get = file_get_contents($url);
-                             file_put_contents("voice.amr",$get);
+                             file_put_contents("voice.amr", $get);
                              $Content = "是语音哦~";
-                             $this->responseMsg($data,$Content);
-                         }else if($data->MsgType=="video") {
+                             $this->responseMsg($data, $Content);
+                         } else if ($data->MsgType == "video") {
                              $access_token = $this->getAccessToken();
                              Log::info("====视频====" . $access_token);
-                             $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
+                             $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" . $access_token . "&media_id=" . $data->MediaId;
                              $get = file_get_contents($url);
                              file_put_contents("video.mp4", $get);
                              $Content = "是视频呀-";
                              $this->responseMsg($data, $Content);
-                         }
+                         } else if ($data->Event == "CLICK") {
+                             if ($data->EventKey == "V1001_TODAY_QQ") {
+                                 $key = "qiandao";
+                                 $openid = (string)$data->FromUserName;
+                                 //sismember 命令判断成员元素是否是集合的成员。
+                                 $slsMember = Redis::sismember($key, $openid);
+                                 //是成员元素  返回 1  已签到
+                                 if ($slsMember == "1") {
+                                     $Content = "已签到";
+                                     $this->info($data, $Content);
+                                 } else {
+                                     $Content = "签到成功";
+                                     Redis::sAdd($key, $openid);
+                                     $this->responseMsg($data, $Content);
+                                 }
+//                Log::info("=====slemenber=======".$slsMember);
+                             }
+                          }
                      }
 
                 public function getweather()
@@ -250,7 +268,7 @@ class IndexController extends Controller
                 [
                     "type"=>"click",
                     "name"=>"签到",
-                    "key"=>"V1001_TODAY_MUSIC"
+                    "key"=>"V1001_TODAY_QQ"
                 ],
                 [
                     "name"=>"商城",
