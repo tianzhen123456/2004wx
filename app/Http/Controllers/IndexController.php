@@ -175,10 +175,10 @@ class IndexController extends Controller
                              $this->responseMsg($data,$Content);
                          }else if($data->MsgType=="voice"){
                              $access_token = $this->getAccessToken();
-//                             file_put_contents('wx_event.log',$access_token,FILE_APPEND);
+                             Log::info("====语音====".$access_token);
                              $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
                              $get = file_get_contents($url);
-                             file_put_contents("image.jpg",$get);
+                             file_put_contents("voice.amr",$get);
                              $Content = "是语音哦~";
                              $this->responseMsg($data,$Content);
                          }
