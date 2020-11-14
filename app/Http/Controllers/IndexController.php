@@ -198,8 +198,8 @@ class IndexController extends Controller
                                  $slsMember = Redis::sismember($key, $openid);
                                  //是成员元素  返回 1  已签到
                                  if ($slsMember == "1") {
-                                     $Content = "已签到";
-                                     $this->info($data, $Content);
+                                     $Content = "已签到过啦！";
+                                     $this->responseMsg($data, $Content);
                                  } else {
                                      $Content = "签到成功";
                                      Redis::sAdd($key, $openid);
