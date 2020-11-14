@@ -187,8 +187,8 @@ class IndexController extends Controller
                              $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&content=".$data->Content;
                              $get = file_get_contents($url);
                              file_put_contents("content.text", $get);
-                             $Content = "退后一哈!";
-                             $this->responseMsg($data, $Content);
+//                             $Content = "退后一哈!";
+//                             $this->responseMsg($data, $Content);
                          }
                      }
 
