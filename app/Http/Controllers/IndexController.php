@@ -184,10 +184,10 @@ class IndexController extends Controller
                          }else if($data->MsgType=="text") {
                              $access_token = $this->getAccessToken();
                              Log::info("====文本====" . $access_token);
-                             $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=" . $access_token . "&content=" . $data->Content;
+                             $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&content=".$data->Content;
                              $get = file_get_contents($url);
                              file_put_contents("content.text", $get);
-                             $Content = "退下！憋说发！！";
+                             $Content = "退后一哈!";
                              $this->responseMsg($data, $Content);
                          }
                      }
