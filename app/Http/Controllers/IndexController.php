@@ -181,14 +181,14 @@ class IndexController extends Controller
                              file_put_contents("voice.amr",$get);
                              $Content = "是语音哦~";
                              $this->responseMsg($data,$Content);
-                         }else if($data->MsgType=="text") {
+                         }else if($data->MsgType=="video") {
                              $access_token = $this->getAccessToken();
-                             Log::info("====文本====" . $access_token);
-                             $url = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&content=".$data->Content;
+                             Log::info("====视频====" . $access_token);
+                             $url="https://api.weixin.qq.com/cgi-bin/media/get?access_token=".$access_token."&media_id=".$data->MediaId;
                              $get = file_get_contents($url);
-                             file_put_contents("content.text", $get);
-//                             $Content = "退后一哈!";
-//                             $this->responseMsg($data, $Content);
+                             file_put_contents("video.mp4", $get);
+                             $Content = "是视频呀-";
+                             $this->responseMsg($data, $Content);
                          }
                      }
 
