@@ -24,6 +24,7 @@ class VerifyCsrfToken extends Middleware
         '/test2',
         '/Token/callBack',
         '/createMenu',
-        '/getWeather'
+        '/getWeather',
+        '/Token/xcxLogin'
     ];
 }

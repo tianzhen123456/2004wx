@@ -28,7 +28,7 @@ Route::get('/test1','TextController@test1');
 //Route::any('/createMenu','IndexController@createMenu');
 //Route::any('/linShi','IndexController@linShi');
 
-
+//微信
 Route::prefix('/Token')->group(function(){
     Route::any('/','IndexController@index');  //执行微信
     Route::any('/wxEvent','IndexController@wxEvent');  //接受时间推送
@@ -36,6 +36,7 @@ Route::prefix('/Token')->group(function(){
     Route::any('/createMenu','IndexController@createMenu');
     Route::any('/callBack','IndexController@callBack');
     Route::any('/getweather','IndexController@getweather');
+    Route::any('/xcxLogin','XcxController@xcxLogin');
 
 
 
@@ -45,4 +46,15 @@ Route::prefix('/test')->group(function(){
     Route::get('/guzzle1','TextController@guzzle1');
     Route::get('/guzzle2','TextController@guzzle2');
     Route::get('/guzzle3','TextController@guzzle3');
+});
+
+
+//小程序接口
+Route::prefix('/api')->group(function(){
+    Route::get('/userinfo','ApiController@userInfo');
+    Route::get('/test','ApiController@test');
+    Route::get('/goodsList','ApiController@goodsList');
+    Route::get('/goods','ApiController@goods');
+
+
 });
