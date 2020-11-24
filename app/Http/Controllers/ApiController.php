@@ -54,7 +54,7 @@ class ApiController extends Controller
         $response=[
             'goods_name'=>$gs['goods_name'],
             'shop_price'=>$gs['shop_price'],
-            'goods_desc'=>$gs['goods_desc'],
+            'goods_desc'=>explode('|',$gs['goods_desc']),
             'goods_imgs'=>explode('|',$gs['goods_imgs'])
         ];
 
