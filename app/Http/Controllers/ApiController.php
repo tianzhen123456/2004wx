@@ -47,7 +47,7 @@ class ApiController extends Controller
      * 商品详情
      */
     public function  goods(Request $request){
-       $goods_id = Request()->id;
+       $goods_id = Request()-> id;
         $gs=GoodsModel::select('goods_name','shop_price','goods_word','goods_desc','goods_imgs')->where('goods_id',$goods_id)->first()->toArray();
 //        $goodsdd($gs);_imgs=explode('|',$g['goods_imgs']);
 
@@ -61,4 +61,15 @@ class ApiController extends Controller
 
         return $response;
     }
+
+    /**
+     * 收藏
+     */
+
+    public function addFav(Request $request){
+        $goods_id=$request->get('id');
+        dd($goods_id);die;
+        $token=$request->get('token');
+    }
 }
+

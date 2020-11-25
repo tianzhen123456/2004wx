@@ -36,7 +36,7 @@ Route::prefix('/Token')->group(function(){
     Route::any('/createMenu','IndexController@createMenu');
     Route::any('/callBack','IndexController@callBack');
     Route::any('/getweather','IndexController@getweather');
-    Route::any('/xcxLogin','XcxController@xcxLogin');
+    Route::any('/xcxLogin','XcxController@xcxLogin');  //小程序登录
 
 
 
@@ -53,8 +53,9 @@ Route::prefix('/test')->group(function(){
 Route::prefix('/api')->group(function(){
     Route::get('/userinfo','ApiController@userInfo');
     Route::get('/test','ApiController@test');
-    Route::get('/goodsList','ApiController@goodsList');
-    Route::get('/goods','ApiController@goods');
+    Route::get('/goodsList','ApiController@goodsList');  //商品列表
+    Route::get('/goods','ApiController@goods');            //商品详情
+    Route::get('/add-fav','ApiController@addFav');           //收藏
 
 
 });
