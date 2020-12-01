@@ -28,6 +28,6 @@ class VerifyCsrfToken extends Middleware
         '/Token/xcxLogin',
         '/api/userLogin',
         '/api/add-cart',
-        '/api/cart-add',
+        '/api/del-cart',
     ];
 }

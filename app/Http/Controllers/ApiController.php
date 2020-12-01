@@ -238,7 +238,6 @@ class ApiController extends Controller
     {
         $goods_id = $request->post('goodsid');
         $goods_name = $request->post('goods_name');
-        $buy_number = $request->post('buy_number');
         //   dd($goods_id);
         $uid = $_SERVER['uid'];
 //        dd($uid);
@@ -263,7 +262,7 @@ class ApiController extends Controller
                 'goods_id' => $goods_id,
                 'uid' => $uid,
                 'goods_name' => $goods_name,
-                'buy_number' => $buy_number,
+                'buy_number' => 1,
                 'add_time' => time(),
                 'shop_price' => $shop_price
             ];
@@ -325,7 +324,31 @@ class ApiController extends Controller
         return $response;
     }
 
+    /**
+     * 删除购物车商品
+     */
+    public function delCart(Request $request)
+    {
+        $goods_id = $request->post('goods');
+        $goods_arr =  explode(',',$goods_id);
+        $uid = $_SERVER['uid'];
 
+        $res = CartModel::where(['uid'=>$uid])->whereIn('goods_id',$goods_arr)->delete();
+        if($res)        //删除成功
+        {
+            $response = [
+                'errno' => 0,
+                'msg'   => 'ok'
+            ];
+        }else{
+            $response = [
+                'errno' => 500002,
+                'msg'   => '内部错误'
+            ];
+        }
+        return $response;
+
+    }
 
 }
 

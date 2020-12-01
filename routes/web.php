@@ -63,6 +63,6 @@ Route::prefix('/api')->group(function(){
     Route::post('/add-cart','ApiController@addCart')->middleware('check.token');           //加入购物车
     Route::get('/cart-list','ApiController@cartList');           //购物车列表
 //    Route::post('/cart-add','ApiController@cartAdd')->middleware('check.token');
-
+    Route::any('/del-cart','ApiController@delCart')->middleware('check.token');
 
 });
