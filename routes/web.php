@@ -37,6 +37,8 @@ Route::prefix('/Token')->group(function(){
     Route::any('/callBack','IndexController@callBack');
     Route::any('/getweather','IndexController@getweather');
     Route::any('/xcxLogin','XcxController@xcxLogin');  //小程序登录
+    Route::any('/test','XcxController@test');
+
 
 
 
@@ -53,9 +55,14 @@ Route::prefix('/test')->group(function(){
 Route::prefix('/api')->group(function(){
     Route::get('/userinfo','ApiController@userInfo');
     Route::get('/test','ApiController@test');
+    Route::any('/xcxLogin','ApiController@xcxLogin');  //首页登录
+    Route::any('/userLogin','ApiController@userLogin');  //个人中心登录
     Route::get('/goodsList','ApiController@goodsList');  //商品列表
     Route::get('/goods','ApiController@goods');            //商品详情
     Route::get('/add-fav','ApiController@addFav');           //收藏
+    Route::post('/add-cart','ApiController@addCart')->middleware('check.token');           //加入购物车
+    Route::get('/cart-list','ApiController@cartList');           //购物车列表
+//    Route::post('/cart-add','ApiController@cartAdd')->middleware('check.token');
 
 
 });

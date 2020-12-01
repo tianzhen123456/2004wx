@@ -9,7 +9,7 @@ use  App\models\UserxModel;
 class XcxController extends Controller
 {
     /**
-     * 小程序登录
+     * 个人中心登录
      */
 
     public function xcxLogin(Request $request){
@@ -80,6 +80,11 @@ class XcxController extends Controller
         }
 
         return $response;
+    }
+
+    public function test(){
+      echo 111;
+
     }
 }
 
