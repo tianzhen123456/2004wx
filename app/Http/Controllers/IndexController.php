@@ -176,9 +176,8 @@ class IndexController extends Controller
                                  foreach ($response  ['newslist'] as $v) {
                                      $Content .= '拼音:'.$v['pinyin'].'简写:'.$v['jianxie'];
                                  }
-                                 return  $this->responseMsg($data, $Content);
-
                              }
+                             return  $this->responseMsg($data, $Content);
 
 
                              //判断是否是图片信息
