@@ -172,12 +172,12 @@ class IndexController extends Controller
                              $url = "http://api.tianapi.com/txapi/pinyin/index?key=".$appkey."&text=".$Contents;
                              $response = json_decode(file_get_contents($url),true);
                              if($response['code']==200){
-                                 $Contents= "";
+                                 $Content= "";
                                  foreach ($response  ['newslist'] as $v) {
-                                     $Contents .= '拼音:'.$v['pinyin'].'简写:'.$v['jianxie'];
+                                     $Content .= '拼音:'.$v['pinyin'].'简写:'.$v['jianxie'];
                                  }
                              }
-                             return  $this->responseMsg($data, $Contents);
+                             return  $this->responseMsg($data, $Content);
 
 
                              //判断是否是图片信息
