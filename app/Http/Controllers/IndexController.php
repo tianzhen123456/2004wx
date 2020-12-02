@@ -151,8 +151,17 @@ class IndexController extends Controller
 //                                 $this->responseMsg($data, $Content);
 //                             }
                              $Content= $data->Content;
-                             $this->getword($Content);
-                             $this->responseMsg($data, $Content);
+//                             $this->getword($Content);
+                             $apikey ='873c5c2a1fd9db69286296dea1a59c63';
+                             $url="http://api.tianapi.com/txapi/pinyin/index?key=".$apikey."&text=".$Content;
+                             $word=file_get_contents($url);
+                             $word=json_decode($word,true);
+                             if($word['code'] == 200) { //判断状态码
+//                        $Content='';
+//                            $Content .='pinyin:'.$Content;
+
+                                 echo $this->responseMsg($data, $Content);
+                             }
                              //判断是否是图片信息
                          } else if ($data->MsgType == "image") {
                              $datas = [
@@ -293,7 +302,7 @@ class IndexController extends Controller
                     "sub_button"=>[
                         [
                             "type"=>"view",
-                            "name"=>"京东好货",
+                            "name"=>"查询历史",
                             "url"=>"http://www.jd.com"
                         ],
                         [
