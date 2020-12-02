@@ -161,7 +161,7 @@ class IndexController extends Controller
 //                        $Content='';
 //                            $Content .='pinyin:'.$Content;
                                return $Content;
-//                              $this->responseMsg($data, $Content);
+                             $this->responseMsg($data, $Content);
                              }
                              //判断是否是图片信息
                          } else if ($data->MsgType == "image") {
@@ -239,21 +239,21 @@ class IndexController extends Controller
                 }
 
 
-                public function getword($Content){
-                         $apikey ='873c5c2a1fd9db69286296dea1a59c63';
-//                         $text=$data->Content;
-                         $url="http://api.tianapi.com/txapi/pinyin/index?key=".$apikey."&text=".$Content;
-                         $word=file_get_contents($url);
-                         $word=json_decode($word,true);
-                    if($word['code'] == 200){ //判断状态码
-//                        $Content='';
-//                            $Content .='pinyin:'.$Content;
-                        return $Content;
-                    }else{
-                        echo "返回错误，状态消息：".$word['msg'];
-                    }
-
-                }
+//                public function getword($Content){
+//                         $apikey ='873c5c2a1fd9db69286296dea1a59c63';
+////                         $text=$data->Content;
+//                         $url="http://api.tianapi.com/txapi/pinyin/index?key=".$apikey."&text=".$Content;
+//                         $word=file_get_contents($url);
+//                         $word=json_decode($word,true);
+//                    if($word['code'] == 200){ //判断状态码
+////                        $Content='';
+////                            $Content .='pinyin:'.$Content;
+//                        return $Content;
+//                    }else{
+//                        echo "返回错误，状态消息：".$word['msg'];
+//                    }
+//
+//                }
     public function getAccessToken()
     {
         $key = 'wx:access_token';
