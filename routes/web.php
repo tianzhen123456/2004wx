@@ -36,6 +36,10 @@ Route::prefix('/Token')->group(function(){
     Route::any('/createMenu','IndexController@createMenu');
     Route::any('/callBack','IndexController@callBack');
     Route::any('/getweather','IndexController@getweather');
+    Route::any('/getword','IndexController@getword');
+
+
+
     Route::any('/xcxLogin','XcxController@xcxLogin');  //小程序登录
     Route::any('/test','XcxController@test');
 
