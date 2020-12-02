@@ -178,7 +178,7 @@ class IndexController extends Controller
                              ];
 
                              $word = new Word();
-                             $words = Word::select('conent')->where('tousername', $d['tousername'])->first();
+                             $words = Word::select('content')->where('tousername', $d['tousername'])->first();
                              if ($words) {
                                 $Contents="已查询过";
                                  $Contents=$d['content'];
