@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redis;
 use Log;
 use App\models\User;
 use App\models\UserInfo;
+use  App\models\Word;
 
 class IndexController extends Controller
 {
@@ -180,6 +181,25 @@ class IndexController extends Controller
                              $this->responseMsg($data, $Content);
 
 
+                             $d=[
+                                 "tousername" => $data->ToUserName,
+                                 "fromusername" => $data->FromUserName,
+                                 "createtime" => $data->CreateTime,
+                                 "msgtype" => $data->MsgType,
+                                 "content" =>$data->Content,
+                             ];
+
+                             $word = new Word();
+                             $words = Word::selcet('conent')->where('tousername', $d['tousername'])->first();
+                             if ($words) {
+                                $Contents="已查询过";
+                                 $Contents=$d['content'];
+                             }else{
+                                 $Contents="首次查询";
+                                 $Contents=$d['content'];
+                                 $images = $word->insert($d);
+                             }
+                            $this->responseMsg($data, $Contents);
                              //判断是否是图片信息
                          } else if ($data->MsgType == "image") {
                              $datas = [
