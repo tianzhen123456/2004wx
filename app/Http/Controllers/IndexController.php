@@ -238,12 +238,10 @@ class IndexController extends Controller
                     if($word['code'] == 200){ //判断状态码
                         $Content='';
                             $Content .='pinyin:'.$Content;
-
-                         return $Content;
                     }else{
                         echo "返回错误，状态消息：".$word['msg'];
                     }
-
+                    return $Content;
                 }
     public function getAccessToken()
     {
