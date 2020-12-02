@@ -154,18 +154,6 @@ class IndexController extends Controller
 
 //                             $this->getword($Content);
 
-//                             $apikey ='873c5c2a1fd9db69286296dea1a59c63';
-//                             $Content= $data->Content;
-//                             $url="http://api.tianapi.com/txapi/pinyin/index?key=".$apikey."&text=".$Content;
-//                             $word=file_get_contents($url);
-//                             $word=json_decode($word,true);
-//                             if($word['code'] == 200) { //判断状态码
-//                                 $Content = '';
-//                                 foreach ($word['newslist'] as $v) {
-//                                     $Content .= '拼音:'.$v['pinyin'].'简写:'.$v['jianxie'];
-//                                 }
-//                                 return  $this->responseMsg($data, $Content);
-//                             }
 
 
                              $Content= $data->Content;
@@ -190,7 +178,7 @@ class IndexController extends Controller
                              ];
 
                              $word = new Word();
-                             $words = Word::selcet('conent')->where('tousername', $d['tousername'])->first();
+                             $words = Word::select('conent')->where('tousername', $d['tousername'])->first();
                              if ($words) {
                                 $Contents="已查询过";
                                  $Contents=$d['content'];
