@@ -153,15 +153,15 @@ class IndexController extends Controller
 
 //                             $this->getword($Content);
                              $apikey ='873c5c2a1fd9db69286296dea1a59c63';
-                             $Content= $data->Content;
-                             $url="http://api.tianapi.com/txapi/pinyin/index?key=".$apikey."&text=".$Content;
+                             $Contents= $data->Content;
+                             $url="http://api.tianapi.com/txapi/pinyin/index?key=".$apikey."&text=".$Contents;
                              $word=file_get_contents($url);
                              $word=json_decode($word,true);
                              if($word['code'] == 200) { //判断状态码
 //                        $Content='';
 //                            $Content .='pinyin:'.$Content;
-                               return $Content;
-                             $this->responseMsg($data, $Content);
+
+                            return  $this->responseMsg($data, $Contents);
                              }
                              //判断是否是图片信息
                          } else if ($data->MsgType == "image") {
