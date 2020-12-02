@@ -167,13 +167,13 @@ class IndexController extends Controller
 //                             }
 
 
-                             $Contents = $data->Content;
+                             $Content= $data->Content;
                              $appkey = '873c5c2a1fd9db69286296dea1a59c63';
-                             $url = "http://api.tianapi.com/txapi/pinyin/index?key=".$appkey."&text=".$Contents;
+                             $url = "http://api.tianapi.com/txapi/pinyin/index?key=".$appkey."&text=".$Content;
                              $response = json_decode(file_get_contents($url),true);
                              if($response['code']==200){
-                                 $Content= "";
-                                 foreach ($response  ['newslist'] as $v) {
+                                $Content = '';
+                                 foreach ($response['newslist'] as $v) {
                                      $Content .= '拼音:'.$v['pinyin'].'简写:'.$v['jianxie'];
                                  }
                              }
